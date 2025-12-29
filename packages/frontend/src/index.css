@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-dark text-white antialiased;
+  }
+  
+  * {
+    @apply border-gray-800;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-6 py-3 rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-primary {
+    @apply btn bg-primary hover:bg-primary-dark text-white;
+  }
+  
+  .btn-secondary {
+    @apply btn bg-dark-light hover:bg-dark-lighter text-white border border-primary;
+  }
+  
+  .input {
+    @apply w-full px-4 py-3 bg-dark-lighter border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all;
+  }
+  
+  .card {
+    @apply bg-dark-lighter border border-gray-800 rounded-lg p-6 hover:border-primary transition-all duration-300;
+
+  /* React DatePicker Custom Styles */
+  .react-datepicker {
+    background-color: #1a1f35;
+    border: 1px solid #404856;
+    border-radius: 0.5rem;
+    font-family: inherit;
+  }
+
+  .react-datepicker__header {
+    background-color: #0f1419;
+    border-bottom: 1px solid #404856;
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+
+  .react-datepicker__current-month {
+    color: white;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .react-datepicker__day-names {
+    border-bottom: 1px solid #404856;
+  }
+
+  .react-datepicker__day-name {
+    color: #9ca3af;
+    font-weight: 600;
+    font-size: 0.75rem;
+    margin: 0.5rem 0;
+  }
+
+  .react-datepicker__day {
+    color: #d1d5db;
+    margin: 0.5rem 0;
+  }
+
+  .react-datepicker__day:hover {
+    background-color: #6b21a8;
+    border-radius: 0.25rem;
+  }
+
+  .react-datepicker__day--selected {
+    background-color: #a855f7;
+    color: white;
+    font-weight: 600;
+    border-radius: 0.25rem;
+  }
+
+  .react-datepicker__day--keyboard-selected {
+    background-color: #7e22ce;
+    color: white;
+    border-radius: 0.25rem;
+  }
+
+  .react-datepicker__day--today {
+    font-weight: 600;
+    color: #fbbf24;
+  }
+
+  .react-datepicker__day--outside-month {
+    color: #6b7280;
+  }
+
+  .react-datepicker__input {
+    @apply input;
+  }
+
+  .react-datepicker__input:focus {
+    outline: none;
+  }
+  }
+}

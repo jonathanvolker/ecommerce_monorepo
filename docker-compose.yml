@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: sexshop-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: sexshop-ecommerce
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - sexshop-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: sexshop-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - packages/backend/.env
+    depends_on:
+      - mongodb
+    volumes:
+      - ./packages/backend:/app/backend
+      - ./packages/shared:/app/shared
+      - /app/backend/node_modules
+      - /app/shared/node_modules
+    networks:
+      - sexshop-network
+    command: npm run dev
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: sexshop-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    env_file:
+      - packages/frontend/.env
+    depends_on:
+      - backend
+    volumes:
+      - ./packages/frontend:/app/frontend
+      - ./packages/shared:/app/shared
+      - /app/frontend/node_modules
+      - /app/shared/node_modules
+    networks:
+      - sexshop-network
+    command: npm run dev
+
+volumes:
+  mongodb_data:
+
+networks:
+  sexshop-network:
+    driver: bridge

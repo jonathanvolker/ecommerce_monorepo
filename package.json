@@ -1,0 +1,44 @@
+{
+  "name": "sexshop-ecommerce",
+  "version": "1.0.0",
+  "description": "E-commerce para sexshop con React y Node.js",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend dev",
+    "dev": "concurrently \"pnpm dev:backend\" \"pnpm dev:frontend\"",
+    "build:frontend": "pnpm --filter frontend build",
+    "build:backend": "pnpm --filter backend build",
+    "build": "pnpm --filter shared build && pnpm build:backend && pnpm build:frontend",
+    "lint": "eslint . --ext .ts,.tsx --max-warnings=999",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "clean": "pnpm -r exec rm -rf dist node_modules"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "metro-minify-terser": "^0.83.3",
+    "prettier": "^3.2.5",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "resolutions": {
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18"
+  },
+  "dependencies": {
+    "metro": "^0.83.3",
+    "metro-runtime": "^0.83.3"
+  }
+}
