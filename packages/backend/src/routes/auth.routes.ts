@@ -11,6 +11,9 @@ router.post('/register', authLimiter, authController.register.bind(authControlle
 router.post('/login', authLimiter, authController.login.bind(authController));
 router.post('/refresh', authController.refreshToken.bind(authController));
 router.post('/logout', authController.logout.bind(authController));
+router.post('/forgot-password', authLimiter, authController.forgotPassword.bind(authController));
+router.post('/reset-password', authLimiter, authController.resetPassword.bind(authController));
+router.post('/change-password', authenticate, authController.changePassword.bind(authController));
 
 // Protected routes
 router.get('/me', authenticate, authController.getMe.bind(authController));

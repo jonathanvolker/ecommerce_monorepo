@@ -1,7 +1,16 @@
 import jwt from 'jsonwebtoken';
-import { User } from '../models';
-import { IRegisterInput, ILoginInput, IAuthResponse } from '@sexshop/shared';
+import crypto from 'crypto';
+import { User, PasswordReset } from '../models';
+import {
+  IRegisterInput,
+  ILoginInput,
+  IAuthResponse,
+  IForgotPasswordInput,
+  IResetPasswordInput,
+  IChangePasswordInput,
+} from '@sexshop/shared';
 import { AppError } from '../middlewares/errorHandler';
+import { buildResetPasswordEmail, sendMail } from './email.service';
 
 interface TokenPayload {
   id: string;
@@ -10,6 +19,8 @@ interface TokenPayload {
 }
 
 export class AuthService {
+  private resetExpiryMinutes = Number(process.env.RESET_TOKEN_EXP_MIN || 30);
+
   private generateAccessToken(payload: TokenPayload): string {
     return jwt.sign(payload, process.env.JWT_ACCESS_SECRET!, {
       expiresIn: process.env.JWT_ACCESS_EXPIRY || '15m',
@@ -22,23 +33,26 @@ export class AuthService {
     } as any);
   }
 
+  private generateResetToken() {
+    const token = crypto.randomBytes(32).toString('hex');
+    const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+    const expiresAt = new Date(Date.now() + this.resetExpiryMinutes * 60 * 1000);
+    return { token, tokenHash, expiresAt };
+  }
+
   async register(input: IRegisterInput): Promise<IAuthResponse> {
-    console.log('📝 [REGISTER] Intento de registro:', { email: input.email, firstName: input.firstName });
     // Verificar si el email ya existe
     const existingUser = await User.findOne({ email: input.email });
     if (existingUser) {
-      console.log('❌ [REGISTER] Email ya existe:', input.email);
       throw new AppError('El email ya está registrado', 409);
     }
 
     // Crear usuario
-    console.log('➕ [REGISTER] Creando usuario en BD...');
     const user = await User.create({
       ...input,
       isAdmin: false,
       isActive: true,
     });
-    console.log('✅ [REGISTER] Usuario creado:', user._id);
 
     // Generar tokens
     const payload: TokenPayload = {
@@ -66,12 +80,10 @@ export class AuthService {
   }
 
   async login(input: ILoginInput): Promise<IAuthResponse> {
-    console.log('🔐 [LOGIN] Intento de login:', input.email);
     // Buscar usuario con password
     const user = await User.findOne({ email: input.email }).select('+password');
     
     if (!user) {
-      console.log('❌ [LOGIN] Usuario no encontrado:', input.email);
       throw new AppError('Credenciales inválidas', 401);
     }
 
@@ -82,9 +94,7 @@ export class AuthService {
 
     // Verificar password
     const isPasswordValid = await user.comparePassword(input.password);
-    console.log('🔑 [LOGIN] Password válido:', isPasswordValid);
     if (!isPasswordValid) {
-      console.log('❌ [LOGIN] Password incorrecto para:', input.email);
       throw new AppError('Credenciales inválidas', 401);
     }
 
@@ -154,5 +164,71 @@ export class AuthService {
       isActive: user.isActive,
       createdAt: user.createdAt,
     };
+  }
+
+  async requestPasswordReset(input: IForgotPasswordInput): Promise<void> {
+    const user = await User.findOne({ email: input.email });
+    // No revelar existencia de usuario
+    if (!user) return;
+
+    const { token, tokenHash, expiresAt } = this.generateResetToken();
+
+    await PasswordReset.create({
+      user: user._id,
+      tokenHash,
+      expiresAt,
+    });
+
+    const mail = buildResetPasswordEmail(token);
+    try {
+      await sendMail({
+        to: user.email,
+        subject: mail.subject,
+        html: mail.html,
+        text: mail.text,
+      });
+    } catch (err) {
+      // No bloquear el flujo si falla el envío de mail
+    }
+  }
+
+  async resetPassword(input: IResetPasswordInput): Promise<void> {
+    const tokenHash = crypto.createHash('sha256').update(input.token).digest('hex');
+
+    const reset = await PasswordReset.findOne({
+      tokenHash,
+      usedAt: { $exists: false },
+      expiresAt: { $gt: new Date() },
+    });
+
+    if (!reset) {
+      throw new AppError('Token inválido o expirado', 400);
+    }
+
+    const user = await User.findById(reset.user).select('+password');
+    if (!user) {
+      throw new AppError('Usuario no encontrado', 404);
+    }
+
+    user.password = input.password;
+    await user.save();
+
+    reset.usedAt = new Date();
+    await reset.save();
+  }
+
+  async changePassword(userId: string, input: IChangePasswordInput): Promise<void> {
+    const user = await User.findById(userId).select('+password');
+    if (!user) {
+      throw new AppError('Usuario no encontrado', 404);
+    }
+
+    const isValid = await user.comparePassword(input.currentPassword);
+    if (!isValid) {
+      throw new AppError('Contraseña actual incorrecta', 400);
+    }
+
+    user.password = input.newPassword;
+    await user.save();
   }
 }

@@ -74,6 +74,34 @@ export class AuthController {
     }
   }
 
+  async forgotPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      await authService.requestPasswordReset(req.body);
+      // Responder siempre éxito para no filtrar usuarios
+      res.json({ success: true, message: 'Si el email existe, recibirás un enlace de recuperación' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async resetPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      await authService.resetPassword(req.body);
+      res.json({ success: true, message: 'Contraseña actualizada' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async changePassword(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      await authService.changePassword(req.user!.id, req.body);
+      res.json({ success: true, message: 'Contraseña cambiada correctamente' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async logout(req: Request, res: Response) {
     res.clearCookie('refreshToken');
     res.json({

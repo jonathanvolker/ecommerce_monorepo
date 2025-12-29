@@ -1,6 +1,7 @@
 import { Order, Product, User } from '../models';
 import { ICreateOrderInput, OrderStatus } from '@sexshop/shared';
 import { AppError } from '../middlewares/errorHandler';
+import { buildOrderAdminEmail, buildOrderConfirmationEmail, sendMail } from './email.service';
 
 export class OrderService {
   async create(userId: string, input: ICreateOrderInput) {
@@ -64,6 +65,34 @@ export class OrderService {
 
     await order.populate('user', 'firstName lastName email');
     
+      // Notificar por correo (no bloquear el flujo si falla)
+      try {
+        const userMail = buildOrderConfirmationEmail(order);
+        await sendMail({
+          to: (order.user as any).email,
+          subject: userMail.subject,
+          html: userMail.html,
+          text: userMail.text,
+        });
+
+        const adminEmails = (process.env.ADMIN_EMAILS || '')
+          .split(',')
+          .map((e) => e.trim())
+          .filter(Boolean);
+
+        if (adminEmails.length > 0) {
+          const adminMail = buildOrderAdminEmail(order);
+          await sendMail({
+            to: adminEmails,
+            subject: adminMail.subject,
+            html: adminMail.html,
+            text: adminMail.text,
+          });
+        }
+      } catch (err) {
+        console.error('❌ Error enviando mails de orden:', err);
+      }
+
     return order;
   }
 

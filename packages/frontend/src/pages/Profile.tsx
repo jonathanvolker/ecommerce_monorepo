@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 import { apiClient } from '@/lib/axios';
 import DatePicker from 'react-datepicker';
@@ -130,6 +130,17 @@ export default function Profile() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Cambiar contraseña */}
+      <div className="bg-gray-900 rounded-lg p-6 mb-8 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h2 className="text-2xl font-bold mb-1">Cambiar contraseña</h2>
+          <p className="text-gray-400 text-sm">Gestiona tu contraseña.</p>
+        </div>
+        <Link to="/change-password" className="btn btn-primary w-full md:w-auto text-center">
+          Cambiar contraseña
+        </Link>
       </div>
 
       {/* Historial de pedidos */}

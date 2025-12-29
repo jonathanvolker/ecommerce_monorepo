@@ -15,6 +15,7 @@ import orderRoutes from './routes/order.routes';
 import storeConfigRoutes from './routes/storeConfig.routes';
 import uploadRoutes from './routes/upload.routes';
 
+// Cargar .env (en Docker las vars vienen por env_file, en dev busca .env local)
 dotenv.config();
 
 const app: Application = express();
@@ -69,7 +70,6 @@ mongoose
   .connect(MONGODB_URI)
   .then(() => {
     console.log('✅ Conectado a MongoDB');
-    console.log('🗄️  Base de datos:', mongoose.connection.name);
     app.listen(PORT, () => {
       console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
     });

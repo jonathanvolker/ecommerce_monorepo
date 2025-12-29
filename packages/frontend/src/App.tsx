@@ -8,6 +8,9 @@ import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import ChangePassword from './pages/ChangePassword';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import AdminDashboard from './pages/admin/Dashboard';
@@ -24,6 +27,9 @@ function App() {
         <Route path="checkout" element={<Checkout />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="reset-password" element={<ResetPassword />} />
+        <Route path="change-password" element={<ChangePassword />} />
         <Route path="profile" element={<Profile />} />
         <Route path="privacy" element={<Privacy />} />
         <Route path="terms" element={<Terms />} />
