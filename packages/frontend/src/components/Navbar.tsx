@@ -11,8 +11,10 @@ export default function Navbar() {
   const user = useAuthStore((state) => state.user);
   const logoutAction = useAuthStore((state) => state.logout);
   const items = useCartStore((state) => state.items);
+  const cartCount = items.length;
   const [menuOpen, setMenuOpen] = useState(false);
   const [storeConfig, setStoreConfig] = useState<IStoreConfig | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchStoreConfig();
@@ -40,14 +42,21 @@ export default function Navbar() {
     }
   };
 
-  const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery('');
+      setMenuOpen(false);
+    }
+  };
 
   return (
-    <nav className="bg-dark-lighter border-b border-gray-800 sticky top-0 z-50">
-      <div className="container mx-auto px-3 md:px-4">
-        <div className="flex items-center justify-between h-14 md:h-16">
+    <nav className="bg-gray-900 text-white border-b border-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
-          <Link to="/" className="text-lg md:text-2xl font-bold" onClick={() => setMenuOpen(false)}>
+          <Link to="/" className="text-2xl md:text-4xl font-bold flex-shrink-0" onClick={() => setMenuOpen(false)}>
             {storeConfig?.footerBrandName ? (
               <span className="text-white">
                 <span className="text-primary">{storeConfig.footerBrandName.split(' ')[0] || 'Sexy'}</span>
@@ -63,8 +72,28 @@ export default function Navbar() {
             )}
           </Link>
 
+          {/* Search Bar - Desktop & Mobile */}
+          <form onSubmit={handleSearch} className="flex max-w-xs md:max-w-sm">
+            <div className="w-full relative">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Buscar"
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-1 md:py-2 text-xs md:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+              />
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors"
+                aria-label="Buscar"
+              >
+                🔍
+              </button>
+            </div>
+          </form>
+
           {/* Navigation - Desktop */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-8 flex-shrink-0">
             <Link to="/" className="hover:text-primary transition-colors">
               Inicio
             </Link>
@@ -74,7 +103,7 @@ export default function Navbar() {
           </div>
 
           {/* Actions - Desktop & Mobile */}
-          <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
             {/* Cart */}
             <Link
               to="/cart"
@@ -146,7 +175,7 @@ export default function Navbar() {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <div className="md:hidden border-t border-gray-800 py-3 space-y-2">
+          <div className="md:hidden border-t border-gray-800 py-3 space-y-3">
             <Link
               to="/"
               className="block py-2 hover:text-primary transition-colors"

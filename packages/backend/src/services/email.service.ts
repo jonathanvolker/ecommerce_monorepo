@@ -35,15 +35,16 @@ function createTransport() {
 }
 
 export async function sendMail({ to, subject, html, text }: SendMailOptions) {
-  const transport = createTransport();
-  const { mailFrom } = ensureConfig();
-  await transport.sendMail({
-    from: mailFrom,
-    to,
-    subject,
-    html,
-    text,
-  });
+  // eslint-disable-next-line no-useless-catch
+    const transport = createTransport();
+    const { mailFrom } = ensureConfig();
+    await transport.sendMail({
+      from: mailFrom,
+      to,
+      subject,
+      html,
+      text,
+    });
 }
 
 export function buildResetPasswordEmail(token: string) {
