@@ -1,8 +1,8 @@
-import { Router } from 'express';
+import { Router, type Router as ExpressRouter } from 'express';
 import { UserController } from '../controllers/user.controller';
 import { authenticate, requireAdmin } from '../middlewares/auth.middleware';
 
-const router = Router();
+const router: ExpressRouter = Router();
 const userController = new UserController();
 
 // Todas las rutas requieren autenticación y permisos de admin
