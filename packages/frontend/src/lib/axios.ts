@@ -36,7 +36,6 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       
       try {
-        console.log('[AXIOS] Intentando refrescar token...');
         // Intentar refrescar el token
         const response = await api.post('/auth/refresh');
         const { accessToken } = response.data.data;

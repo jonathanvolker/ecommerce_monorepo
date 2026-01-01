@@ -7,7 +7,6 @@ const productService = new ProductService();
 export class ProductController {
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log('📦 [PRODUCTS] GET ALL - Query params:', req.query);
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 12;
       const sortBy = req.query.sortBy as string;
@@ -21,9 +20,7 @@ export class ProductController {
         isActive: req.query.isActive ? req.query.isActive === 'true' : undefined,
       };
 
-      console.log('📦 [PRODUCTS] Filters:', filters, 'Page:', page, 'Limit:', limit, 'SortBy:', sortBy);
       const result = await productService.getAll(filters, page, limit, sortBy);
-      console.log('📦 [PRODUCTS] Resultados:', result.total, 'productos encontrados');
 
       res.json({
         success: true,

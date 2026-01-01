@@ -88,9 +88,7 @@ export default function ProductsAdmin() {
         ...prev,
         images: [...prev.images, ...uploadedUrls],
       }));
-      
-      console.log('🖼️ Imágenes después de subir:', [...formData.images, ...uploadedUrls]);
-      
+        
       // Resetear el input file
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
