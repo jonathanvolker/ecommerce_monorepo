@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { apiClient } from '@/lib/axios';
+import { cacheService } from '@/lib/cache';
 import type { IStoreConfig } from '@sexshop/shared';
 
 export default function Footer() {
@@ -11,12 +12,20 @@ export default function Footer() {
     fetchStoreConfig();
   }, []);
 
-  const fetchStoreConfig = async () => {
+  const fetchStoreConfig = async (forceRefresh = false) => {
+    const useCache = !forceRefresh;
+    const cachedConfig = useCache ? cacheService.get<IStoreConfig>('store-config') : null;
+
+    if (cachedConfig) {
+      setStoreConfig(cachedConfig);
+      return;
+    }
+
     try {
       const response = await apiClient.get('/store-config');
       const config = response.data?.data || response.data;
-      console.log('Footer - Config cargada:', config);
       setStoreConfig(config);
+      cacheService.set('store-config', config, 10 * 60 * 1000);
     } catch (error) {
       console.error('Error al cargar configuración:', error);
     }
@@ -25,9 +34,6 @@ export default function Footer() {
   const whatsappUrl = storeConfig?.whatsappNumber 
     ? `https://wa.me/${storeConfig.whatsappNumber}` 
     : '#';
-
-  console.log('Footer - storeConfig:', storeConfig);
-  console.log('Footer - whatsappUrl:', whatsappUrl);
 
   return (
     <footer className="bg-dark-lighter border-t border-gray-800 mt-auto">

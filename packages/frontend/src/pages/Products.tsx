@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { apiClient } from '@/lib/axios';
+import { cacheService } from '@/lib/cache';
 import toast from 'react-hot-toast';
 import type { IProduct, ICategory } from '@sexshop/shared';
 
@@ -112,37 +113,56 @@ export default function Products() {
 
   const fetchCategories = async () => {
     try {
-      // Obtener todas las categorías únicas de los productos
-      const response = await apiClient.get('/products?limit=1000');
-      const data = response.data?.data || response.data;
-      const products = data?.items || data?.products || [];
+      // Intentar obtener del cache primero
+      const cached = cacheService.get<ICategory[]>('categories');
+      if (cached) {
+        setCategories(cached);
+        return;
+      }
       
-      // Extraer categorías únicas
-      const uniqueCategories = [...new Set(products.map((p: IProduct) => typeof p.category === 'object' ? p.category.name : p.category).filter(Boolean))];
-      setCategories(uniqueCategories.map((name: string) => ({ _id: name, name, slug: name.toLowerCase().replace(/\s+/g, '-'), isActive: true, createdAt: new Date() })));
+      // Usar el nuevo endpoint optimizado
+      const response = await apiClient.get('/categories/list');
+      const data = response.data?.data || [];
+      
+      setCategories(data);
+      // Cachear por 10 minutos
+      cacheService.set('categories', data, 600000);
     } catch (error: unknown) {
       console.error('Error al cargar categorías');
     }
   };
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (forceRefresh = false) => {
+    const params = new URLSearchParams();
+    if (search) params.append('search', search);
+    if (minPrice) params.append('minPrice', minPrice);
+    if (maxPrice) params.append('maxPrice', maxPrice);
+    if (sortBy) params.append('sortBy', sortBy);
+    if (category) params.append('category', category);
+    params.append('isActive', 'true');
+    params.append('page', page.toString());
+    params.append('limit', '6'); // 6 productos por página (2 filas de 3)
+
+    const cacheKey = `products:list:${params.toString()}`;
+    const useCache = !forceRefresh;
+    const cached = useCache ? cacheService.get<{ items: IProduct[]; totalPages: number }>(cacheKey) : null;
+
+    if (cached) {
+      setProducts(cached.items);
+      setTotalPages(cached.totalPages);
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
-      const params = new URLSearchParams();
-      if (search) params.append('search', search);
-      if (minPrice) params.append('minPrice', minPrice);
-      if (maxPrice) params.append('maxPrice', maxPrice);
-      if (sortBy) params.append('sortBy', sortBy);
-      if (category) params.append('category', category);
-      params.append('isActive', 'true');
-      params.append('page', page.toString());
-      params.append('limit', '6'); // 6 productos por página (2 filas de 3)
-
       const response = await apiClient.get(`/products?${params.toString()}`);
       const data = response.data?.data || response.data;
       const products = data?.items || data?.products || [];
+      const totalPagesFromApi = data?.totalPages || 1;
       setProducts(products);
-      setTotalPages(data?.totalPages || 1);
+      setTotalPages(totalPagesFromApi);
+      cacheService.set(cacheKey, { items: products, totalPages: totalPagesFromApi }, 5 * 60 * 1000);
     } catch (error: unknown) {
       toast.error('Error al cargar productos');
     } finally {

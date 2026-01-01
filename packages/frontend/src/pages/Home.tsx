@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { apiClient } from '@/lib/axios';
+import { cacheService } from '@/lib/cache';
 import type { IProduct, IStoreConfig } from '@sexshop/shared';
 
 export default function Home() {
@@ -29,22 +30,74 @@ export default function Home() {
     };
   }, []);
 
-  const fetchData = async () => {
+  const fetchData = async (forceRefresh = false) => {
+    const useCache = !forceRefresh;
+    const cachedFeatured = useCache ? cacheService.get<IProduct[]>('home:featured') : null;
+    const cachedOnSale = useCache ? cacheService.get<IProduct[]>('home:sale') : null;
+    const cachedConfig = useCache ? cacheService.get<IStoreConfig>('store-config') : null;
+
+    if (cachedFeatured) {
+      const featuredCached = cachedFeatured.filter((p) => p.featured || (p as any).isFeatured);
+      setFeaturedProducts(featuredCached);
+    }
+
+    if (cachedOnSale) {
+      const onSaleCached = cachedOnSale.filter((p) => (p as any).isOnSale || (p as any).discount);
+      setOnSaleProducts(onSaleCached);
+    }
+
+    if (cachedConfig) {
+      setStoreConfig(cachedConfig);
+    }
+
+    if (cachedFeatured && cachedOnSale && cachedConfig) {
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      const [productsRes, configRes] = await Promise.all([
-        apiClient.get('/products?limit=100&isActive=true'),
-        apiClient.get<{ success: boolean; data: IStoreConfig }>('/store-config')
+      const featuredPromise = cachedFeatured
+        ? Promise.resolve(cachedFeatured)
+        : apiClient.get('/products?isFeatured=true&isActive=true&limit=12').then((productsRes) => {
+            const data = productsRes.data?.data || productsRes.data;
+            const products = data?.items || data?.products || [];
+            cacheService.set('home:featured', products, 10 * 60 * 1000);
+            return products;
+          });
+
+      const salePromise = cachedOnSale
+        ? Promise.resolve(cachedOnSale)
+        : apiClient.get('/products?isOnSale=true&isActive=true&limit=12').then((productsRes) => {
+            const data = productsRes.data?.data || productsRes.data;
+            const products = data?.items || data?.products || [];
+            cacheService.set('home:sale', products, 10 * 60 * 1000);
+            return products;
+          });
+
+      const configPromise = cachedConfig
+        ? Promise.resolve(cachedConfig)
+        : apiClient
+            .get<{ success: boolean; data: IStoreConfig }>('/store-config')
+            .then((configRes) => {
+              const config = (configRes.data?.data || configRes.data) as IStoreConfig;
+              cacheService.set('store-config', config, 10 * 60 * 1000);
+              return config;
+            });
+
+      const [featuredProductsRes, onSaleProductsRes, config] = await Promise.all([
+        featuredPromise,
+        salePromise,
+        configPromise,
       ]);
-      
-      const data = productsRes.data?.data || productsRes.data;
-      const products = data?.items || data?.products || [];
-      
-      const featured = products.filter((p: IProduct) => p.featured);
-      const onSale = products.filter((p: IProduct) => p.isOnSale);
-      
+
+      const featured = featuredProductsRes.filter((p: IProduct) => p.featured || (p as any).isFeatured);
+      const onSale = onSaleProductsRes.filter((p: IProduct) => (p as any).isOnSale || (p as any).discount);
+
       setFeaturedProducts(featured);
       setOnSaleProducts(onSale);
-      setStoreConfig(configRes.data.data);
+      setStoreConfig(config);
     } catch (error) {
       console.error('Error al cargar datos');
     } finally {

@@ -47,4 +47,5 @@ export interface IProductFilters {
   search?: string;
   isFeatured?: boolean;
   isActive?: boolean;
+  isOnSale?: boolean;
 }

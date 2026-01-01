@@ -30,6 +30,10 @@ export class ProductService {
       query.featured = filters.isFeatured;
     }
 
+    if (filters.isOnSale !== undefined) {
+      query.isOnSale = filters.isOnSale;
+    }
+
     if (filters.isActive !== undefined) {
       query.isActive = filters.isActive;
     }
@@ -44,10 +48,27 @@ export class ProductService {
       sort = { price: -1 }; // Precio mayor a menor
     }
     
+    // Projection optimizada para listados (solo campos necesarios)
+    const projection = {
+      name: 1,
+      price: 1,
+      images: 1,
+      image: 1,
+      category: 1,
+      featured: 1,
+      isFeatured: 1,
+      isOnSale: 1,
+      discount: 1,
+      stock: 1,
+      isActive: 1,
+      // Small fields to support home hero text if needed
+      shortDescription: 1,
+      createdAt: 1,
+    };
+    
     const [products, total] = await Promise.all([
       Product.find(query)
-        // NO hacer populate porque category es string en MongoDB, no ObjectId
-        // .populate('category', 'name slug')
+        .select(projection)
         .skip(skip)
         .limit(limit)
         .sort(sort)
@@ -132,9 +153,22 @@ export class ProductService {
   }
 
   async getFeatured(limit = 6) {
+    const projection = {
+      name: 1,
+      price: 1,
+      images: 1,
+      image: 1,
+      category: 1,
+      featured: 1,
+      isFeatured: 1,
+      isOnSale: 1,
+      discount: 1,
+    };
+    
     return Product.find({ isFeatured: true, isActive: true })
-      .populate('category', 'name slug')
+      .select(projection)
       .limit(limit)
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
   }
 }
