@@ -9,6 +9,8 @@ export default function Home() {
   const [onSaleProducts, setOnSaleProducts] = useState<IProduct[]>([]);
   const [storeConfig, setStoreConfig] = useState<IStoreConfig | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showAllSale, setShowAllSale] = useState(false);
+  const [showAllFeatured, setShowAllFeatured] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -126,7 +128,7 @@ export default function Home() {
         <p className="text-lg md:text-xl text-gray-400 mb-4 md:mb-8 mt-4">
           {storeConfig?.homeMainText || 'Tu tienda de confianza para productos de calidad +18'}
         </p>
-        <Link to="/products" className="btn-primary inline-block">
+        <Link to="/products" className="btn-primary inline-block my-6 md:my-8">
           Catalogo
         </Link>
       </section>
@@ -134,19 +136,24 @@ export default function Home() {
       {/* Sección de Ofertas */}
       {onSaleProducts.length > 0 && (
         <section className="py-4 md:py-12">
-          <h2 className="text-xl md:text-3xl font-bold text-center mb-3 md:mb-8">
-            <span className="text-primary">Ofertas</span> Especiales
-          </h2>
+          <div className="flex justify-between items-center mb-3 md:mb-8">
+            <h2 className="text-xl md:text-3xl font-bold">
+              <span className="text-primary">Ofertas</span> Especiales
+            </h2>
+            <Link to="/products?isOnSale=true" className="btn-secondary px-2 md:px-4 py-1 md:py-2 text-[10px] md:text-sm whitespace-nowrap">
+              Ver ofertas
+            </Link>
+          </div>
           <div className="relative">
             <div
               className="md:grid md:grid-cols-3 md:gap-6 flex gap-2 overflow-x-auto snap-x snap-mandatory pb-2 md:pb-0 [-ms-overflow-style:none] [scrollbar-width:none]"
               style={{ scrollbarWidth: 'none' }}
             >
-              {getSalePage().map((product) => (
+              {getSalePage().map((product, index) => (
                 <Link
                   key={product._id}
                   to={`/products/${product._id}`}
-                  className="bg-gray-900 rounded-lg overflow-hidden hover:ring-2 hover:ring-primary transition-all group relative snap-start min-w-[calc(40%-0.5rem)]"
+                  className={`bg-gray-900 rounded-lg overflow-hidden hover:ring-2 hover:ring-primary transition-all group relative snap-start min-w-[calc(40%-0.5rem)] ${!showAllSale && index >= 3 ? 'md:hidden' : ''}`}
                 >
                   <div className="absolute top-1 right-1 md:top-2 md:right-2 bg-red-600 text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-xs md:text-sm font-bold z-10">
                     OFERTA
@@ -172,19 +179,29 @@ export default function Home() {
                 </Link>
               ))}
             </div>
-            <div className="flex justify-center mt-3 md:mt-4">
-              <Link to="/products?isOnSale=true" className="btn-secondary px-3 md:px-4 py-2 text-xs md:text-sm">
-                Ver ofertas
-              </Link>
-            </div>
+            {onSaleProducts.length > 3 && (
+              <div className="hidden md:flex justify-center mt-6">
+                <button
+                  onClick={() => setShowAllSale(!showAllSale)}
+                  className="btn-secondary px-6 py-2.5 text-sm"
+                >
+                  {showAllSale ? 'Ver menos' : `Ver más (${onSaleProducts.length - 3} más)`}
+                </button>
+              </div>
+            )}
           </div>
         </section>
       )}
 
       <section className="py-4 md:py-12">
-        <h2 className="text-xl md:text-3xl font-bold text-center mb-3 md:mb-8">
-          Productos <span className="text-primary">Destacados</span>
-        </h2>
+        <div className="flex justify-between items-center mb-3 md:mb-8">
+          <h2 className="text-xl md:text-3xl font-bold">
+            Productos <span className="text-primary">Destacados</span>
+          </h2>
+          <Link to="/products?isFeatured=true" className="btn-secondary px-2 md:px-4 py-1 md:py-2 text-[10px] md:text-sm whitespace-nowrap">
+            Ver destacados
+          </Link>
+        </div>
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
@@ -195,11 +212,11 @@ export default function Home() {
               className="md:grid md:grid-cols-3 md:gap-6 flex gap-2 overflow-x-auto snap-x snap-mandatory pb-2 md:pb-0 [-ms-overflow-style:none] [scrollbar-width:none]"
               style={{ scrollbarWidth: 'none' }}
             >
-              {getFeaturedPage().map((product) => (
+              {getFeaturedPage().map((product, index) => (
                 <Link
                   key={product._id}
                   to={`/products/${product._id}`}
-                  className="bg-gray-900 rounded-lg overflow-hidden hover:ring-2 hover:ring-primary transition-all group snap-start min-w-[calc(40%-0.5rem)]"
+                  className={`bg-gray-900 rounded-lg overflow-hidden hover:ring-2 hover:ring-primary transition-all group snap-start min-w-[calc(40%-0.5rem)] ${!showAllFeatured && index >= 3 ? 'md:hidden' : ''}`}
                 >
                   <div className="aspect-square bg-gray-800 relative overflow-hidden">
                     {product.images?.length > 0 ? (
@@ -222,11 +239,16 @@ export default function Home() {
                 </Link>
               ))}
             </div>
-            <div className="flex justify-center mt-3 md:mt-4">
-              <Link to="/products?isFeatured=true" className="btn-secondary px-3 md:px-4 py-2 text-xs md:text-sm">
-                Ver destacados
-              </Link>
-            </div>
+            {featuredProducts.length > 3 && (
+              <div className="hidden md:flex justify-center mt-6">
+                <button
+                  onClick={() => setShowAllFeatured(!showAllFeatured)}
+                  className="btn-secondary px-6 py-2.5 text-sm"
+                >
+                  {showAllFeatured ? 'Ver menos' : `Ver más (${featuredProducts.length - 3} más)`}
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <p className="text-center text-gray-500">No hay productos destacados aún. Marca algunos desde el panel de administración.</p>
