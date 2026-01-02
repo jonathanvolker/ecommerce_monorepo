@@ -18,13 +18,7 @@ if (process.env.CLOUDINARY_URL) {
 export class UploadController {
   async uploadImage(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log('📤 [UPLOAD] Iniciando subida de imagen');
-      console.log('📤 [UPLOAD] Archivo recibido:', req.file ? 'SÍ' : 'NO');
-      console.log('📤 [UPLOAD] CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME);
-      console.log('📤 [UPLOAD] CLOUDINARY_API_KEY:', process.env.CLOUDINARY_API_KEY ? 'Configurada' : 'NO configurada');
-      console.log('📤 [UPLOAD] CLOUDINARY_URL:', process.env.CLOUDINARY_URL ? 'Configurada' : 'NO configurada');
-      
-      if (!req.file) {
+        if (!req.file) {
         throw new AppError('No se proporcionó ninguna imagen', 400);
       }
 
@@ -39,9 +33,7 @@ export class UploadController {
           message: 'Cloudinary no configurado, usando placeholder',
         });
       }
-      
-      console.log('✅ [UPLOAD] Cloudinary configurado, procediendo a subir...');
-
+     
       // Subir a Cloudinary
       const result = await new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
@@ -60,8 +52,6 @@ export class UploadController {
 
         uploadStream.end(req.file!.buffer);
       });
-
-      console.log('✅ [UPLOAD] Imagen subida exitosamente:', (result as any).secure_url);
 
       res.json({
         success: true,

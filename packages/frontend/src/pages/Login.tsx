@@ -29,9 +29,7 @@ export default function Login() {
 
   const onSubmit = async (data: LoginForm) => {
     try {
-      console.log('[LOGIN] Intentando login con:', data.email);
       const response = await apiClient.post<{ success: boolean; data: IAuthResponse }>('/auth/login', data);
-      console.log('[LOGIN] Respuesta exitosa:', response.data);
       const { user, accessToken } = response.data.data;
       
       login(user, accessToken);

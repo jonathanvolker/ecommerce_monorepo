@@ -14,6 +14,7 @@ import categoryRoutes from './routes/category.routes';
 import orderRoutes from './routes/order.routes';
 import storeConfigRoutes from './routes/storeConfig.routes';
 import uploadRoutes from './routes/upload.routes';
+import userRoutes from './routes/user.routes';
 
 // Cargar .env (en Docker las vars vienen por env_file, en dev busca .env local)
 dotenv.config();
@@ -60,6 +61,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/store-config', storeConfigRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/users', userRoutes);
 
 // Error handlers
 app.use(notFoundHandler);

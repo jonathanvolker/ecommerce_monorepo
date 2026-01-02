@@ -23,6 +23,7 @@ export class ProductController {
 
       const result = await productService.getAll(filters, page, limit, sortBy);
     
+
       res.json({
         success: true,
         data: result,

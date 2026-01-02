@@ -5,6 +5,7 @@ import ProductsAdmin from './ProductsAdmin';
 import OrdersAdmin from './OrdersAdmin';
 import CategoriesAdmin from './CategoriesAdmin';
 import StoreConfigAdmin from './StoreConfigAdmin';
+import UsersAdmin from './UsersAdmin';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function AdminDashboard() {
   const tabs = [
     { id: 'products', label: 'Productos', path: '/admin' },
     { id: 'orders', label: 'Pedidos', path: '/admin/orders' },
+    { id: 'users', label: 'Usuarios', path: '/admin/users' },
     { id: 'categories', label: 'Categorías', path: '/admin/categories' },
     { id: 'config', label: 'Configuración', path: '/admin/config' },
   ];
@@ -54,6 +56,7 @@ export default function AdminDashboard() {
       <Routes>
         <Route index element={<ProductsAdmin />} />
         <Route path="orders" element={<OrdersAdmin />} />
+        <Route path="users" element={<UsersAdmin />} />
         <Route path="categories" element={<CategoriesAdmin />} />
         <Route path="config" element={<StoreConfigAdmin />} />
       </Routes>

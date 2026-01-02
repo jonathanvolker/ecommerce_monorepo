@@ -43,3 +43,31 @@ export enum UserRole {
   USER = 'USER',
   ADMIN = 'ADMIN',
 }
+
+// User management types
+export interface IUserWithStats extends IUserResponse {
+  totalSpent: number;
+  totalOrders: number;
+  lastOrderDate?: Date;
+}
+
+export interface IUserUpdateInput {
+  isAdmin?: boolean;
+  isActive?: boolean;
+}
+
+export interface IUserListFilters {
+  search?: string;
+  isAdmin?: boolean;
+  isActive?: boolean;
+  page?: number;
+  limit?: number;
+}
+
+export interface IUserStats {
+  totalSpent: number;
+  totalOrders: number;
+  completedOrders: number;
+  lastOrderDate?: Date;
+  firstOrderDate?: Date;
+}
