@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { apiClient } from '@/lib/axios';
+import { cacheService } from '@/lib/cache';
 import type { IStoreConfig } from '@sexshop/shared';
 
 export default function Footer() {
@@ -11,11 +12,20 @@ export default function Footer() {
     fetchStoreConfig();
   }, []);
 
-  const fetchStoreConfig = async () => {
+  const fetchStoreConfig = async (forceRefresh = false) => {
+    const useCache = !forceRefresh;
+    const cachedConfig = useCache ? cacheService.get<IStoreConfig>('store-config') : null;
+
+    if (cachedConfig) {
+      setStoreConfig(cachedConfig);
+      return;
+    }
+
     try {
       const response = await apiClient.get('/store-config');
       const config = response.data?.data || response.data;
       setStoreConfig(config);
+      cacheService.set('store-config', config, 10 * 60 * 1000);
     } catch (error) {
       console.error('Error al cargar configuración:', error);
     }

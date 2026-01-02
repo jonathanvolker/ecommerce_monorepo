@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { apiClient } from '@/lib/axios';
+import { cacheService } from '@/lib/cache';
 import { useCartStore } from '@/store/cartStore';
 import toast from 'react-hot-toast';
 import type { IProduct } from '@sexshop/shared';
@@ -19,12 +20,24 @@ export default function ProductDetail() {
     fetchProduct();
   }, [id]);
 
-  const fetchProduct = async () => {
+  const fetchProduct = async (forceRefresh = false) => {
+    if (!id) return;
+    const cacheKey = `product:${id}`;
+    const useCache = !forceRefresh;
+    const cached = useCache ? cacheService.get<IProduct>(cacheKey) : null;
+
+    if (cached) {
+      setProduct(cached);
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       const response = await apiClient.get(`/products/${id}`);
       const product = response.data?.data || response.data;
       setProduct(product);
+      cacheService.set(cacheKey, product, 10 * 60 * 1000);
     } catch (error: unknown) {
       toast.error('Producto no encontrado');
       navigate('/products');

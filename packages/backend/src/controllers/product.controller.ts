@@ -18,9 +18,11 @@ export class ProductController {
         search: req.query.search as string,
         isFeatured: req.query.isFeatured === 'true' ? true : undefined,
         isActive: req.query.isActive ? req.query.isActive === 'true' : undefined,
+        isOnSale: req.query.isOnSale === 'true' ? true : undefined,
       };
 
       const result = await productService.getAll(filters, page, limit, sortBy);
+    
 
       res.json({
         success: true,

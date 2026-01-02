@@ -18,6 +18,19 @@ export class CategoryController {
     }
   }
 
+  async getList(req: Request, res: Response, next: NextFunction) {
+    try {
+      const categories = await categoryService.getList();
+
+      res.json({
+        success: true,
+        data: categories,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const category = await categoryService.getById(req.params.id);

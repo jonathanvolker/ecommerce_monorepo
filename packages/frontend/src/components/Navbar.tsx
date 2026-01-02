@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useCartStore } from '@/store/cartStore';
 import { apiClient } from '@/lib/axios';
+import { cacheService } from '@/lib/cache';
 import toast from 'react-hot-toast';
 import type { IStoreConfig } from '@sexshop/shared';
 
@@ -20,10 +21,20 @@ export default function Navbar() {
     fetchStoreConfig();
   }, []);
 
-  const fetchStoreConfig = async () => {
+  const fetchStoreConfig = async (forceRefresh = false) => {
+    const useCache = !forceRefresh;
+    const cachedConfig = useCache ? cacheService.get<IStoreConfig>('store-config') : null;
+
+    if (cachedConfig) {
+      setStoreConfig(cachedConfig);
+      return;
+    }
+
     try {
       const response = await apiClient.get<{ success: boolean; data: IStoreConfig }>('/store-config');
-      setStoreConfig(response.data.data);
+      const config = (response.data?.data || response.data) as IStoreConfig;
+      setStoreConfig(config);
+      cacheService.set('store-config', config, 10 * 60 * 1000);
     } catch (error) {
       console.error('Error al cargar configuración');
     }

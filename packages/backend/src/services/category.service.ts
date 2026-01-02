@@ -4,6 +4,7 @@ import { AppError } from '../middlewares/errorHandler';
 
 export class CategoryService {
   async syncFromProducts() {
+    // eslint-disable-next-line no-useless-catch
     try {
       // Obtener categorías únicas de productos
       const productCategories = await Product.distinct('category');
@@ -40,6 +41,14 @@ export class CategoryService {
     
     const query = includeInactive ? {} : { isActive: true };
     return Category.find(query).sort({ name: 1 });
+  }
+
+  async getList() {
+    // Lightweight endpoint for category list (no sync, minimal data)
+    return Category.find({ isActive: true })
+      .select('name slug')
+      .sort({ name: 1 })
+      .lean();
   }
 
   async getById(id: string) {
