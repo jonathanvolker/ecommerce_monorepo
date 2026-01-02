@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "SexySecret SexShop",
+    "slug": "sexshop-ecommerce",
+    "version": "1.0.0",
+    "owner": "jonivolker",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "plugins": [
+      "./plugins/withAndroidNetworkSecurityConfig.js",
+      "./plugins/withNetworkSecurityConfigFile.js"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sexshop.ecommerce",
+      "icon": "./assets/icon.png"
+    },
+    "android": {
+      "icon": "./assets/icon.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#000000"
+      },
+      "package": "com.sexshop.ecommerce",
+      "permissions": [
+        "INTERNET"
+      ],
+      "usesCleartextTraffic": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3d19b5e8-7668-408a-ac8f-59457a89c361"
+      }
+    }
+  }
+}
