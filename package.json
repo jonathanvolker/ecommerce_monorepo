@@ -1,6 +1,6 @@
 {
   "name": "sexshop-ecommerce",
-  "version": "1.0.0",
+  "version": "1.1.0-beta",
   "description": "E-commerce para sexshop con React y Node.js",
   "private": true,
   "workspaces": [

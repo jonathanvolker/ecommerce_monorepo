@@ -123,7 +123,7 @@ export default function Home() {
       <section className="text-center py-0">
         <div className="flex justify-center mb-0">
           <img 
-            src="https://res.cloudinary.com/volkerdev/image/upload/v1689122219/SexySecret/Porfolio_540x540_dv2jrl.png" 
+            src="https://res.cloudinary.com/volkerdev/image/upload/v1767374835/SexySecret/sexy_recortada_1_ozel31.png" 
             alt="SexySecret Sex Shop"
             className="w-full md:w-4/5 max-w-4xl h-auto object-contain"
           />
