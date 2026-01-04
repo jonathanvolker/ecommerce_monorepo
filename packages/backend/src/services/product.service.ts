@@ -51,6 +51,7 @@ export class ProductService {
     // Projection optimizada para listados (solo campos necesarios)
     const projection = {
       name: 1,
+      description: 1,
       price: 1,
       images: 1,
       image: 1,
