@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { apiClient } from '@/lib/axios';
+import { cacheService } from '@/lib/cache';
 import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
 import toast from 'react-hot-toast';
@@ -72,11 +73,20 @@ export default function Checkout() {
     fetchStoreConfig();
   }, [user, items.length, navigate]);
 
-  const fetchStoreConfig = async () => {
+  const fetchStoreConfig = async (forceRefresh = false) => {
+    const useCache = !forceRefresh;
+    const cachedConfig = useCache ? cacheService.get<IStoreConfig>('store-config') : null;
+
+    if (cachedConfig) {
+      setStoreConfig(cachedConfig);
+      return;
+    }
+
     try {
       const response = await apiClient.get('/store-config');
       const config = response.data?.data || response.data;
       setStoreConfig(config);
+      cacheService.set('store-config', config, 10 * 60 * 1000);
     } catch (error) {
       toast.error('Error al cargar configuración de la tienda');
     }

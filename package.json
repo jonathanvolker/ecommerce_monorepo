@@ -1,6 +1,6 @@
 {
   "name": "sexshop-ecommerce",
-  "version": "1.0.0",
+  "version": "1.1.0-beta",
   "description": "E-commerce para sexshop con React y Node.js",
   "private": true,
   "workspaces": [
@@ -33,7 +33,7 @@
     "node": ">=18.0.0",
     "pnpm": ">=8.0.0"
   },
-  "resolutions": {
+  "overrides": {
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18"
   },

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { apiClient } from '@/lib/axios';
+import { cacheService } from '@/lib/cache';
 import type { IStoreConfig } from '@sexshop/shared';
 
 export default function Terms() {
@@ -10,10 +11,23 @@ export default function Terms() {
     fetchConfig();
   }, []);
 
-  const fetchConfig = async () => {
+  const fetchConfig = async (forceRefresh = false) => {
+    const useCache = !forceRefresh;
+    const cachedConfig = useCache ? cacheService.get<IStoreConfig>('store-config') : null;
+
+    if (cachedConfig) {
+      setConfig(cachedConfig);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+
     try {
       const response = await apiClient.get<{ success: boolean; data: IStoreConfig }>('/store-config');
-      setConfig(response.data.data);
+      const config = (response.data?.data || response.data) as IStoreConfig;
+      setConfig(config);
+      cacheService.set('store-config', config, 10 * 60 * 1000);
     } catch (error) {
       console.error('Error al cargar configuración');
     } finally {

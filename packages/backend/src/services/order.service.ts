@@ -2,6 +2,7 @@ import { Order, Product, User } from '../models';
 import { ICreateOrderInput, OrderStatus } from '@sexshop/shared';
 import { AppError } from '../middlewares/errorHandler';
 import { buildOrderAdminEmail, buildOrderConfirmationEmail, sendMail } from './email.service';
+import { Types } from 'mongoose';
 
 export class OrderService {
   async create(userId: string, input: ICreateOrderInput) {
@@ -56,12 +57,15 @@ export class OrderService {
       orderStatus: OrderStatus.PENDING_PAYMENT,
     });
 
-    // Descontar stock
-    for (const item of input.items) {
-      await Product.findByIdAndUpdate(item.productId, {
-        $inc: { stock: -item.quantity },
-      });
-    }
+    // Descontar stock en bulk (1 query vs N queries)
+    const bulkOps = input.items.map(item => ({
+      updateOne: {
+        filter: { _id: new Types.ObjectId(item.productId) },
+        update: { $inc: { stock: -item.quantity } }
+      }
+    }));
+    
+    await Product.bulkWrite(bulkOps);
 
     await order.populate('user', 'firstName lastName email');
     

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { apiClient } from '@/lib/axios';
+import { cacheService } from '@/lib/cache';
 import { useCartStore } from '@/store/cartStore';
 import toast from 'react-hot-toast';
 import type { IProduct } from '@sexshop/shared';
@@ -12,19 +13,30 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [showDescription, setShowDescription] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
 
   useEffect(() => {
     fetchProduct();
   }, [id]);
 
-  const fetchProduct = async () => {
+  const fetchProduct = async (forceRefresh = false) => {
+    if (!id) return;
+    const cacheKey = `product:${id}`;
+    const useCache = !forceRefresh;
+    const cached = useCache ? cacheService.get<IProduct>(cacheKey) : null;
+
+    if (cached) {
+      setProduct(cached);
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       const response = await apiClient.get(`/products/${id}`);
       const product = response.data?.data || response.data;
       setProduct(product);
+      cacheService.set(cacheKey, product, 10 * 60 * 1000);
     } catch (error: unknown) {
       toast.error('Producto no encontrado');
       navigate('/products');
@@ -124,26 +136,9 @@ export default function ProductDetail() {
         </div>
 
         {product.description && (
-          <div className="mb-2 md:mb-4">
-            <button
-              onClick={() => setShowDescription(!showDescription)}
-              className="flex items-center justify-between w-full text-left py-2 md:py-0 md:mb-2 hover:text-primary transition-colors"
-            >
-              <h2 className="text-sm md:text-xl font-semibold">Descripción</h2>
-              <svg
-                className={`w-4 h-4 md:w-5 md:h-5 transition-transform ${
-                  showDescription ? 'rotate-180' : ''
-                }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            {showDescription && (
-              <p className="text-gray-400 whitespace-pre-line text-xs md:text-base leading-relaxed">{product.description}</p>
-            )}
+          <div className="mb-2 md:mb-4 bg-gray-800 p-3 md:p-4 rounded-lg">
+            <h2 className="text-sm md:text-xl font-semibold mb-2">Descripción</h2>
+            <p className="text-gray-400 whitespace-pre-line text-xs md:text-base leading-relaxed">{product.description}</p>
           </div>
         )}
 
