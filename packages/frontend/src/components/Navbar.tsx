@@ -16,10 +16,36 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [storeConfig, setStoreConfig] = useState<IStoreConfig | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [scrolled, setScrolled] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     fetchStoreConfig();
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Solo ocultar en móvil (ancho < 768px)
+      if (window.innerWidth < 768) {
+        if (currentScrollY > lastScrollY && currentScrollY > 50) {
+          // Scrolling down
+          setScrolled(true);
+        } else if (currentScrollY < lastScrollY) {
+          // Scrolling up
+          setScrolled(false);
+        }
+      } else {
+        setScrolled(false);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   const fetchStoreConfig = async (forceRefresh = false) => {
     const useCache = !forceRefresh;
@@ -63,7 +89,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-gray-900 text-white border-b border-gray-800">
+    <nav className={`bg-gray-900 text-white border-b border-gray-800 fixed top-0 left-0 right-0 z-30 transition-transform duration-300 ${scrolled ? '-translate-y-full' : 'translate-y-0'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
