@@ -1,4 +1,4 @@
-import express, { Application } from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
@@ -15,6 +15,7 @@ import orderRoutes from './routes/order.routes';
 import storeConfigRoutes from './routes/storeConfig.routes';
 import uploadRoutes from './routes/upload.routes';
 import userRoutes from './routes/user.routes';
+import sitemapRoutes from './routes/sitemap.routes';
 
 // Cargar .env (en Docker las vars vienen por env_file, en dev busca .env local)
 dotenv.config();
@@ -46,6 +47,9 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
+// Servir archivos públicos (robots.txt, etc)
+app.use(express.static('public'));
+
 // Logger
 app.use(httpLogger);
 
@@ -62,6 +66,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/store-config', storeConfigRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/users', userRoutes);
+app.use('/', sitemapRoutes); // Sitemap en la raíz
 
 // Error handlers
 app.use(notFoundHandler);

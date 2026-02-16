@@ -1,0 +1,22 @@
+# Robots.txt para sexysecret.com.ar
+# Permite a todos los bots acceder al sitio
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /*?*sort=
+Disallow: /*?*page=
+Disallow: /*&*page=
+
+# Sitemap
+Sitemap: https://www.sexysecret.com.ar/sitemap.xml
+
+# Google
+User-agent: Googlebot
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
