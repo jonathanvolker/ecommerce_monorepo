@@ -89,24 +89,16 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={`bg-gray-900 text-white border-b border-gray-800 fixed top-0 left-0 right-0 z-30 transition-transform duration-300 ${scrolled ? '-translate-y-full' : 'translate-y-0'}`}>
+    <nav className={`bg-dark-lighter text-white border-b border-gray-800 fixed top-0 left-0 right-0 z-30 transition-transform duration-300 ${scrolled ? '-translate-y-full' : 'translate-y-0'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-4">
+        <div className="flex items-center justify-between h-14 gap-4">
           {/* Logo */}
-          <Link to="/" className="text-2xl md:text-4xl font-bold flex-shrink-0" onClick={() => setMenuOpen(false)}>
-            {storeConfig?.footerBrandName ? (
-              <span className="text-white">
-                <span className="text-primary">{storeConfig.footerBrandName.split(' ')[0] || 'Sexy'}</span>
-                {storeConfig.footerBrandName.split(' ')[1] && (
-                  <span className="text-white">{storeConfig.footerBrandName.split(' ')[1]}</span>
-                )}
-              </span>
-            ) : (
-              <>
-                <span className="text-primary">Sexy</span>
-                <span className="text-white">Secret</span>
-              </>
-            )}
+          <Link to="/" className="flex-shrink-0 flex items-center translate-y-2 -my-4" onClick={() => setMenuOpen(false)}>
+            <img 
+              src="/sexysecret.png" 
+              alt="SexySecret" 
+              className="h-28 md:h-32 w-auto object-contain"
+            />
           </Link>
 
           {/* Search Bar - Desktop & Mobile */}

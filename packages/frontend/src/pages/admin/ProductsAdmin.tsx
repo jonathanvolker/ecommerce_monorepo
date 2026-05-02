@@ -264,7 +264,7 @@ export default function ProductsAdmin() {
                       <p className="text-primary font-bold mb-1 text-sm md:text-base">${product.price.toLocaleString()}</p>
                       <p className="text-xs text-gray-400 mb-2">Stock: {product.stock}</p>
                       <div className="flex gap-1">
-                        <button onClick={() => handleEdit(product)} className="btn bg-blue-900 hover:bg-blue-800 flex-1 text-xs py-1">
+                        <button onClick={() => handleEdit(product)} className="btn bg-dark-light hover:bg-gray-700 border border-gray-600 flex-1 text-xs py-1">
                           Editar
                         </button>
                         <button onClick={() => handleDelete(product._id)} className="btn bg-red-900 hover:bg-red-800 flex-1 text-xs py-1">
@@ -293,7 +293,7 @@ export default function ProductsAdmin() {
                         <p className="text-primary font-bold mb-1 text-sm md:text-base">${product.price.toLocaleString()}</p>
                         <p className="text-xs text-gray-400 mb-2">Stock: {product.stock}</p>
                         <div className="flex gap-1">
-                          <button onClick={() => handleEdit(product)} className="btn bg-blue-900 hover:bg-blue-800 flex-1 text-xs py-1">
+                          <button onClick={() => handleEdit(product)} className="btn bg-dark-light hover:bg-gray-700 border border-gray-600 flex-1 text-xs py-1">
                             Editar
                           </button>
                           <button onClick={() => handleDelete(product._id)} className="btn bg-red-900 hover:bg-red-800 flex-1 text-xs py-1">

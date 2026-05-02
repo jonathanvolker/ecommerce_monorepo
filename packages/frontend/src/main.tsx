@@ -16,7 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           style: {
             background: '#1a1a1a',
             color: '#fff',
-            border: '2px solid #FF00FF',
+            border: '2px solid #FF7EB9',
             padding: '16px',
             fontSize: '16px',
             maxWidth: '90vw',
@@ -24,7 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           },
           success: {
             iconTheme: {
-              primary: '#FF00FF',
+              primary: '#FF7EB9',
               secondary: '#fff',
             },
           },

@@ -98,7 +98,7 @@ export default function CategoriesAdmin() {
             <h3 className="font-semibold mb-2">{category.name}</h3>
             <p className="text-sm text-gray-400 mb-4 line-clamp-2">{category.description || 'Sin descripción'}</p>
             <div className="flex gap-2">
-              <button onClick={() => handleEdit(category)} className="btn bg-blue-900 hover:bg-blue-800 flex-1 text-sm">
+              <button onClick={() => handleEdit(category)} className="btn bg-dark-light hover:bg-gray-700 border border-gray-600 flex-1 text-sm">
                 Editar
               </button>
               <button onClick={() => handleDelete(category._id)} className="btn bg-red-900 hover:bg-red-800 flex-1 text-sm">

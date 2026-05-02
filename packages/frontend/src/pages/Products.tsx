@@ -192,7 +192,7 @@ export default function Products() {
       {/* Botón para mostrar filtros en mobile */}
       <button
         onClick={() => setShowFilters(!showFilters)}
-        className="md:hidden w-full bg-gray-800 text-gray-200 py-2.5 rounded-lg mb-3 flex items-center justify-center gap-2 font-medium border border-gray-700 hover:bg-gray-700 hover:border-gray-600 transition-all active:scale-95"
+        className="md:hidden w-full bg-dark-light text-gray-200 py-2.5 rounded-lg mb-3 flex items-center justify-center gap-2 font-medium border border-gray-600 hover:bg-dark-lighter hover:border-gray-500 transition-all active:scale-95"
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -206,12 +206,12 @@ export default function Products() {
       </button>
 
       {/* Filtros */}
-      <div className={`bg-gray-900 p-3 md:p-6 rounded-lg mb-4 md:mb-8 ${showFilters ? 'block' : 'hidden md:block'}`}>
+      <div className={`bg-dark-lighter p-3 md:p-6 rounded-lg mb-4 md:mb-8 border border-gray-800 ${showFilters ? 'block' : 'hidden md:block'}`}>
         <div className="flex justify-between items-center mb-3 md:mb-4">
           <span className="text-xs md:text-sm text-gray-400">Filtros aplicados: {activeFiltersCount}</span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-4">
-          <div>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
+          <div className="col-span-2 md:col-span-1">
             <label className="block text-xs md:text-sm font-medium mb-1 md:mb-2">Categoría</label>
             <select
               className="input w-full text-xs md:text-sm"
@@ -226,7 +226,7 @@ export default function Products() {
               ))}
             </select>
           </div>
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <label className="block text-xs md:text-sm font-medium mb-1 md:mb-2">Ordenar por</label>
             <select
               className="input w-full text-xs md:text-sm"
@@ -238,7 +238,7 @@ export default function Products() {
               <option value="price_desc">Precio: mayor a menor</option>
             </select>
           </div>
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <label className="block text-xs md:text-sm font-medium mb-1 md:mb-2">Buscar</label>
             <input
               type="text"
@@ -249,7 +249,7 @@ export default function Products() {
             />
           </div>
           {/* Precios en paralelo */}
-          <div className="grid grid-cols-2 gap-2 md:col-span-2">
+          <div className="col-span-2 md:col-span-2 grid grid-cols-2 gap-2">
             <div>
               <label className="block text-xs md:text-sm font-medium mb-1 md:mb-2">Precio Mín</label>
               <input
@@ -275,7 +275,7 @@ export default function Products() {
 
         {/* Filtros rápidos: Ofertas y Destacados */}
         <div className="mt-4 flex gap-3 flex-wrap">
-          <label className="flex items-center gap-2 px-3 py-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-700 transition-all border border-gray-700 text-xs md:text-sm">
+          <label className="flex items-center gap-2 px-3 py-2 bg-dark-light rounded-lg cursor-pointer hover:bg-dark-lighter transition-all border border-gray-700 text-xs md:text-sm">
             <input
               type="checkbox"
               checked={localIsOnSale}
@@ -284,7 +284,7 @@ export default function Products() {
             />
             <span className="font-medium">🔴 Ofertas</span>
           </label>
-          <label className="flex items-center gap-2 px-3 py-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-700 transition-all border border-gray-700 text-xs md:text-sm">
+          <label className="flex items-center gap-2 px-3 py-2 bg-dark-light rounded-lg cursor-pointer hover:bg-dark-lighter transition-all border border-gray-700 text-xs md:text-sm">
             <input
               type="checkbox"
               checked={localIsFeatured}
@@ -296,16 +296,16 @@ export default function Products() {
         </div>
         
         {/* Botones de acción */}
-        <div className="flex gap-2 mt-4 justify-end md:static sticky bottom-0 left-0 right-0 bg-gray-900 pb-2 md:pb-0 z-10">
+        <div className="flex gap-2 mt-4 justify-end md:static sticky bottom-0 left-0 right-0 bg-dark-lighter pb-2 md:pb-0 z-10">
           <button
             onClick={applyFilters}
-            className="flex-1 md:flex-none px-6 md:px-8 bg-gray-700 text-white py-2 md:py-2.5 rounded-lg hover:bg-gray-600 transition-all font-medium text-xs md:text-sm border border-gray-600 hover:border-gray-500 active:scale-[0.98]"
+            className="flex-1 md:flex-none px-6 md:px-8 bg-dark-light text-white py-2 md:py-2.5 rounded-lg hover:bg-dark-lighter transition-all font-medium text-xs md:text-sm border border-gray-600 hover:border-gray-500 active:scale-[0.98]"
           >
             Aplicar Filtros
           </button>
           <button
             onClick={clearFilters}
-            className="flex-1 md:flex-none px-4 md:px-6 bg-gray-800 text-gray-300 py-2 md:py-2.5 rounded-lg hover:bg-gray-700 transition-all font-medium text-xs md:text-sm border border-gray-700 hover:border-gray-600 active:scale-[0.98]"
+            className="flex-1 md:flex-none px-4 md:px-6 bg-dark-light text-gray-300 py-2 md:py-2.5 rounded-lg hover:bg-dark-lighter transition-all font-medium text-xs md:text-sm border border-gray-700 hover:border-gray-600 active:scale-[0.98]"
           >
             Limpiar
           </button>
@@ -330,24 +330,30 @@ export default function Products() {
               <Link
                 key={product._id}
                 to={`/products/${product._id}`}
-                className="bg-gray-900 rounded-lg overflow-hidden hover:ring-2 hover:ring-primary transition-all group relative"
+                className="bg-dark-lighter rounded-xl overflow-hidden hover:ring-2 hover:ring-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-200 group relative"
               >
                 {((product as any).isOnSale || (product as any).discount) && (
-                  <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-0.5 rounded-full text-xs font-bold z-10">
+                  <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-0.5 rounded-full text-xs font-bold z-10 shadow-md">
                     OFERTA
                   </div>
                 )}
-                <div className="aspect-square bg-gray-800 relative overflow-hidden">
+                <div className="aspect-square bg-dark-light relative overflow-hidden">
                   {product.images?.length > 0 ? (
                     <img
                       src={product.images[0]}
                       alt={product.name}
                       loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-600">
                       Sin imagen
+                    </div>
+                  )}
+                  {/* Hover overlay */}
+                  {product.stock !== 0 && (
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                      <span className="bg-primary text-white text-xs md:text-sm font-bold px-3 py-1.5 rounded-full shadow-lg">Ver →</span>
                     </div>
                   )}
                   {product.stock === 0 && (
@@ -360,7 +366,7 @@ export default function Products() {
                   <h3 className="font-semibold mb-1 md:mb-2 line-clamp-2 text-xs md:text-base min-h-[2rem] md:min-h-[3rem]">{product.name}</h3>
                   <p className="text-primary font-bold text-sm md:text-xl mt-auto">${product.price?.toLocaleString() || '0'}</p>
                   {product.stock > 0 && product.stock <= 5 && (
-                    <p className="text-yellow-500 text-xs mt-1">¡Últimas!</p>
+                    <span className="inline-block mt-1 text-[10px] md:text-xs font-semibold text-yellow-400 border border-yellow-500/40 bg-yellow-500/10 px-1.5 py-0.5 rounded-full w-fit">¡Últimas!</span>
                   )}
                 </div>
               </Link>
@@ -374,24 +380,30 @@ export default function Products() {
                 <Link
                   key={product._id}
                   to={`/products/${product._id}`}
-                  className="bg-gray-900 rounded-lg overflow-hidden hover:ring-2 hover:ring-primary transition-all group relative"
+                  className="bg-dark-lighter rounded-xl overflow-hidden hover:ring-2 hover:ring-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-200 group relative"
                 >
                   {((product as any).isOnSale || (product as any).discount) && (
-                    <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-0.5 rounded-full text-xs font-bold z-10">
+                    <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-0.5 rounded-full text-xs font-bold z-10 shadow-md">
                       OFERTA
                     </div>
                   )}
-                  <div className="aspect-square bg-gray-800 relative overflow-hidden">
+                  <div className="aspect-square bg-dark-light relative overflow-hidden">
                     {product.images?.length > 0 ? (
                       <img
                         src={product.images[0]}
                         alt={product.name}
                         loading="lazy"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-600">
                         Sin imagen
+                      </div>
+                    )}
+                    {/* Hover overlay */}
+                    {product.stock !== 0 && (
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                        <span className="bg-primary text-white text-xs md:text-sm font-bold px-3 py-1.5 rounded-full shadow-lg">Ver →</span>
                       </div>
                     )}
                     {product.stock === 0 && (
@@ -404,7 +416,7 @@ export default function Products() {
                     <h3 className="font-semibold mb-1 md:mb-2 line-clamp-2 text-xs md:text-base min-h-[2rem] md:min-h-[3rem]">{product.name}</h3>
                     <p className="text-primary font-bold text-sm md:text-xl mt-auto">${product.price?.toLocaleString() || '0'}</p>
                     {product.stock > 0 && product.stock <= 5 && (
-                      <p className="text-yellow-500 text-xs mt-1">¡Últimas!</p>
+                      <span className="inline-block mt-1 text-[10px] md:text-xs font-semibold text-yellow-400 border border-yellow-500/40 bg-yellow-500/10 px-1.5 py-0.5 rounded-full w-fit">¡Últimas!</span>
                     )}
                   </div>
                 </Link>
@@ -420,7 +432,7 @@ export default function Products() {
           <button
             onClick={() => updateParams({ page: Math.max(1, page - 1) })}
             disabled={page === 1}
-            className="btn bg-gray-800 hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed text-xs md:text-base px-3 md:px-6 py-2 md:py-3 rounded-full"
+            className="btn bg-dark-light hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed text-xs md:text-base px-3 md:px-6 py-2 md:py-3 rounded-full border border-gray-700"
           >
             ← Anterior
           </button>
@@ -443,7 +455,7 @@ export default function Products() {
                   className={`w-8 h-8 md:w-10 md:h-10 rounded-full text-xs md:text-sm font-semibold transition-all ${
                     page === pageNum
                       ? 'bg-primary text-white'
-                      : 'bg-gray-800 hover:bg-gray-700 text-gray-400'
+                      : 'bg-dark-light hover:bg-dark-lighter text-gray-400 border border-gray-700'
                   }`}
                 >
                   {pageNum}
@@ -454,7 +466,7 @@ export default function Products() {
           <button
             onClick={() => updateParams({ page: Math.min(totalPages, page + 1) })}
             disabled={page === totalPages}
-            className="btn bg-gray-800 hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed text-xs md:text-base px-3 md:px-6 py-2 md:py-3 rounded-full"
+            className="btn bg-dark-light hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed text-xs md:text-base px-3 md:px-6 py-2 md:py-3 rounded-full border border-gray-700"
           >
             Siguiente →
           </button>
