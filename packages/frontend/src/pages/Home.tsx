@@ -117,19 +117,12 @@ export default function Home() {
 
   return (
     <div className="px-3 md:px-0">
-      <section className="text-center py-0">
-        <div className="flex justify-center mb-0">
-          <img 
-            src="https://res.cloudinary.com/volkerdev/image/upload/v1767374835/SexySecret/sexy_recortada_1_ozel31.png" 
-            alt="SexySecret Sex Shop"
-            className="w-full md:w-4/5 max-w-4xl h-auto object-contain"
-          />
-        </div>
-        <p className="text-lg md:text-xl text-gray-400 mb-4 md:mb-8 mt-4">
+      <section className="text-center py-4 md:py-8">
+        <p className="text-lg md:text-xl text-gray-400 mb-4 md:mb-6">
           {storeConfig?.homeMainText || 'Tu tienda de confianza para productos de calidad +18'}
         </p>
-        <Link to="/products" className="btn-primary inline-block my-6 md:my-8">
-          Catalogo
+        <Link to="/products" className="btn-primary inline-block my-4 md:my-6">
+          Visita nuestro catalogo
         </Link>
       </section>
 
@@ -153,24 +146,27 @@ export default function Home() {
                 <Link
                   key={product._id}
                   to={`/products/${product._id}`}
-                  className={`bg-gray-900 rounded-lg overflow-hidden hover:ring-2 hover:ring-primary transition-all group relative snap-start min-w-[calc(40%-0.5rem)] ${!showAllSale && index >= 3 ? 'md:hidden' : ''}`}
+                  className={`bg-dark-lighter rounded-xl overflow-hidden hover:ring-2 hover:ring-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-200 group relative snap-start min-w-[calc(40%-0.5rem)] ${!showAllSale && index >= 3 ? 'md:hidden' : ''}`}
                 >
-                  <div className="absolute top-1 right-1 md:top-2 md:right-2 bg-red-600 text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-xs md:text-sm font-bold z-10">
+                  <div className="absolute top-1 right-1 md:top-2 md:right-2 bg-red-600 text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-xs md:text-sm font-bold z-10 shadow-md">
                     OFERTA
                   </div>
-                  <div className="aspect-square bg-gray-800 relative overflow-hidden">
+                  <div className="aspect-square bg-dark-light relative overflow-hidden">
                     {product.images?.length > 0 ? (
                       <img
                         src={product.images[0]}
                         alt={product.name}
                         loading="lazy"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-600">
                         Sin imagen
                       </div>
                     )}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                      <span className="bg-primary text-white text-xs md:text-sm font-bold px-3 py-1.5 rounded-full shadow-lg">Ver →</span>
+                    </div>
                   </div>
                   <div className="p-3 md:p-6 flex flex-col">
                     <h3 className="font-semibold mb-2 md:mb-3 line-clamp-2 text-sm md:text-lg min-h-[2.5rem] md:min-h-[3.5rem]">{product.name}</h3>
@@ -216,21 +212,24 @@ export default function Home() {
                 <Link
                   key={product._id}
                   to={`/products/${product._id}`}
-                  className={`bg-gray-900 rounded-lg overflow-hidden hover:ring-2 hover:ring-primary transition-all group snap-start min-w-[calc(40%-0.5rem)] ${!showAllFeatured && index >= 3 ? 'md:hidden' : ''}`}
+                  className={`bg-dark-lighter rounded-xl overflow-hidden hover:ring-2 hover:ring-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-200 group snap-start min-w-[calc(40%-0.5rem)] ${!showAllFeatured && index >= 3 ? 'md:hidden' : ''}`}
                 >
-                  <div className="aspect-square bg-gray-800 relative overflow-hidden">
+                  <div className="aspect-square bg-dark-light relative overflow-hidden">
                     {product.images?.length > 0 ? (
                       <img
                         src={product.images[0]}
                         alt={product.name}
                         loading="lazy"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-600">
                         Sin imagen
                       </div>
                     )}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                      <span className="bg-primary text-white text-xs md:text-sm font-bold px-3 py-1.5 rounded-full shadow-lg">Ver →</span>
+                    </div>
                   </div>
                   <div className="p-3 md:p-6 flex flex-col">
                     <h3 className="font-semibold mb-2 md:mb-3 line-clamp-2 text-sm md:text-lg min-h-[2.5rem] md:min-h-[3.5rem]">{product.name}</h3>
@@ -253,6 +252,17 @@ export default function Home() {
         ) : (
           <p className="text-center text-gray-500">No hay productos destacados aún. Marca algunos desde el panel de administración.</p>
         )}
+      </section>
+
+      {/* Banner decorativo al final */}
+      <section className="py-8 md:py-12">
+        <div className="flex justify-center">
+          <img 
+            src="https://res.cloudinary.com/volkerdev/image/upload/v1767374835/SexySecret/sexy_recortada_1_ozel31.png" 
+            alt="SexySecret Sex Shop"
+            className="w-full md:w-4/5 max-w-4xl h-auto object-contain"
+          />
+        </div>
       </section>
     </div>
   );

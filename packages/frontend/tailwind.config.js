@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import colors from 'tailwindcss/colors';
+
 export default {
   content: [
     "./index.html",
@@ -7,10 +9,12 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Reemplaza el gray azulado de Tailwind por zinc (neutral sin tinte azul)
+        gray: colors.zinc,
         primary: {
-          DEFAULT: '#FF00FF', // Fucsia
-          dark: '#CC00CC',
-          light: '#FF66FF',
+          DEFAULT: '#FF7EB9', // Rosa claro del logo
+          dark: '#E05C99',
+          light: '#FFD1EA',
         },
         dark: {
           DEFAULT: '#000000',

@@ -86,7 +86,7 @@ export default function ProductDetail() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
       {/* Galería de imágenes */}
       <div>
-        <div className="bg-gray-900 rounded-lg overflow-hidden mb-2 md:mb-4">
+        <div className="bg-dark-lighter rounded-lg overflow-hidden mb-2 md:mb-4 border border-gray-800">
           <div className="aspect-square max-h-[45vh] md:max-h-[60vh] mx-auto">
           {product.images.length > 0 ? (
             <img
@@ -126,7 +126,7 @@ export default function ProductDetail() {
         <p className="text-xl md:text-3xl font-bold text-primary mb-3">${product.price.toLocaleString()}</p>
 
         {/* Stock info - más visible */}
-        <div className="bg-gray-800 p-2 md:p-3 rounded-lg mb-2 md:mb-4">
+        <div className="bg-dark-light p-2 md:p-3 rounded-lg mb-2 md:mb-4 border border-gray-800">
           <p className="text-xs md:text-sm text-gray-300">
             Stock: <span className="text-white font-semibold">{product.stock} unidades</span>
           </p>
@@ -136,7 +136,7 @@ export default function ProductDetail() {
         </div>
 
         {product.description && (
-          <div className="mb-2 md:mb-4 bg-gray-800 p-3 md:p-4 rounded-lg">
+          <div className="mb-2 md:mb-4 bg-dark-light p-3 md:p-4 rounded-lg border border-gray-800">
             <h2 className="text-sm md:text-xl font-semibold mb-2">Descripción</h2>
             <p className="text-gray-400 whitespace-pre-line text-xs md:text-base leading-relaxed">{product.description}</p>
           </div>
@@ -162,20 +162,20 @@ export default function ProductDetail() {
         )}
 
         {product.stock > 0 ? (
-          <div className="fixed bottom-0 left-0 right-0 lg:static bg-gray-900 lg:bg-transparent p-3 lg:p-0 border-t lg:border-t-0 border-gray-700 space-y-2 md:space-y-4 shadow-2xl lg:shadow-none z-20">
+          <div className="fixed bottom-0 left-0 right-0 lg:static bg-dark-lighter lg:bg-transparent p-3 lg:p-0 border-t lg:border-t-0 border-gray-700 space-y-2 md:space-y-4 shadow-2xl lg:shadow-none z-20">
             <div className="flex items-center justify-between">
               <label className="text-xs md:text-sm font-medium">Cantidad:</label>
               <div className="flex items-center space-x-2 md:space-x-3">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="btn bg-gray-800 hover:bg-gray-700 w-9 h-9 md:w-12 md:h-12 text-lg md:text-xl flex items-center justify-center rounded-full"
+                  className="btn bg-dark-light hover:bg-dark-lighter border border-gray-700 w-9 h-9 md:w-12 md:h-12 text-lg md:text-xl flex items-center justify-center rounded-full"
                 >
                   -
                 </button>
                 <span className="text-lg md:text-xl font-semibold w-8 md:w-12 text-center">{quantity}</span>
                 <button
                   onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                  className="btn bg-gray-800 hover:bg-gray-700 w-9 h-9 md:w-12 md:h-12 text-lg md:text-xl flex items-center justify-center rounded-full"
+                  className="btn bg-dark-light hover:bg-dark-lighter border border-gray-700 w-9 h-9 md:w-12 md:h-12 text-lg md:text-xl flex items-center justify-center rounded-full"
                 >
                   +
                 </button>
