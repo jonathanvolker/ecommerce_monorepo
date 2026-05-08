@@ -1,6 +1,6 @@
 {
   "name": "@sexshop/backend",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Backend API para sexshop e-commerce",
   "main": "dist/index.js",
   "scripts": {
