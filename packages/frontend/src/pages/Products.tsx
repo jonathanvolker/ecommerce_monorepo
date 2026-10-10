@@ -192,7 +192,7 @@ export default function Products() {
       {/* Botón para mostrar filtros en mobile */}
       <button
         onClick={() => setShowFilters(!showFilters)}
-        className="md:hidden w-full bg-dark-light text-gray-200 py-2.5 rounded-lg mb-3 flex items-center justify-center gap-2 font-medium border border-gray-600 hover:bg-dark-lighter hover:border-gray-500 transition-all active:scale-95"
+        className="md:hidden w-full bg-primary hover:bg-primary-dark text-white py-2.5 rounded-lg mb-3 flex items-center justify-center gap-2 font-medium transition-all active:scale-95"
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -298,16 +298,16 @@ export default function Products() {
         {/* Botones de acción */}
         <div className="flex gap-2 mt-4 justify-end md:static sticky bottom-0 left-0 right-0 bg-dark-lighter pb-2 md:pb-0 z-10">
           <button
-            onClick={applyFilters}
-            className="flex-1 md:flex-none px-6 md:px-8 bg-dark-light text-white py-2 md:py-2.5 rounded-lg hover:bg-dark-lighter transition-all font-medium text-xs md:text-sm border border-gray-600 hover:border-gray-500 active:scale-[0.98]"
-          >
-            Aplicar Filtros
-          </button>
-          <button
             onClick={clearFilters}
             className="flex-1 md:flex-none px-4 md:px-6 bg-dark-light text-gray-300 py-2 md:py-2.5 rounded-lg hover:bg-dark-lighter transition-all font-medium text-xs md:text-sm border border-gray-700 hover:border-gray-600 active:scale-[0.98]"
           >
             Limpiar
+          </button>
+          <button
+            onClick={applyFilters}
+            className="flex-1 md:flex-none px-6 md:px-8 bg-primary hover:bg-primary-dark text-white py-2 md:py-2.5 rounded-lg transition-all font-medium text-xs md:text-sm active:scale-[0.98]"
+          >
+            Aplicar Filtros
           </button>
         </div>
       </div>

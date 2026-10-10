@@ -128,7 +128,7 @@ export default function ProductDetail() {
         {/* Stock info - más visible */}
         <div className="bg-dark-light p-2 md:p-3 rounded-lg mb-2 md:mb-4 border border-gray-800">
           <p className="text-xs md:text-sm text-gray-300">
-            Stock: <span className="text-white font-semibold">{product.stock} unidades</span>
+            Disponibles: <span className="text-white font-semibold">{product.stock} unidades</span>
           </p>
           {product.stock > 0 && product.stock <= 5 && (
             <p className="text-yellow-500 text-xs md:text-sm mt-0.5">¡Últimas unidades!</p>
